@@ -1,0 +1,20 @@
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  row-gap: 20px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    color: var(--text);
+    column-gap: 1em;
+    cursor: pointer;
+  }
+  &__button {
+    outline: none;
+    border: none; 
+    background-color: none;
+    margin-top: auto;
+  }
+}

@@ -1,0 +1,114 @@
+@mixin fb($y: center, $x: false, $w: false) {
+  @if $w {
+    flex-wrap: $w;
+  }
+  @if $x {
+    justify-content: $x;
+  }
+  @if $y {
+    align-items: $y;
+  }
+
+  @if $w ==w {
+    flex-wrap: wrap;
+  }
+  @if $w ==wr {
+    flex-wrap: wrap-reverse;
+  }
+
+  @if $y ==fs {
+    align-items: flex-start;
+  }
+  @if $y ==c {
+    align-items: center;
+  }
+  @if $y ==fe {
+    align-items: flex-end;
+  }
+
+  @if $x ==fs {
+    justify-content: flex-start;
+  }
+  @if $x ==c {
+    justify-content: center;
+  }
+  @if $x ==fe {
+    justify-content: flex-end;
+  }
+  @if $x ==sb {
+    justify-content: space-between;
+  }
+  @if $x ==sa {
+    justify-content: space-around;
+  }
+
+  display: flex;
+}
+@mixin w($w: auto, $h: none) {
+  @if $w != 100% {
+    max-width: $w + rem;
+    width: 100%;
+  }
+  @if $w == 100% {
+    width: 100%;
+  }
+
+  @if $h != none {
+    height: $h + rem;
+  }
+
+  @if $w == $h {
+    min-width: $w + rem;
+    min-height: $h + rem;
+  }
+}
+
+@mixin font($size: 1.8, $h: 2.8, $weight: normal, $fs: normal) {
+  font-size: $size + rem;
+  line-height: $h + rem;
+  font-weight: $weight;
+  font-style: $fs;
+}
+
+$maxWidth: 1250;
+$maxWidthContainer: 1250;
+
+$maxWidthRem: 125;
+$maxWidthContainerRem: 125;
+
+@mixin adapt($property, $startSize, $minSize, $type) {
+  $addSize: $startSize - $minSize;
+
+  @if $type ==1 {
+    #{$property}: $startSize + rem;
+
+    @media (max-width: #{$maxWidthContainer + px}) {
+      #{$property}: calc(
+        #{$minSize + rem} + #{$addSize} *
+          ((100vw - 32rem) / #{$maxWidthContainerRem - 32})
+      );
+    }
+  } @else if $type ==2 {
+    #{$property}: $startSize + rem;
+
+    @media (min-width: #{$maxWidthContainer + px}) {
+      #{$property}: calc(
+        #{$minSize + rem} + #{$addSize} *
+          ((100vw - 32rem) / #{$maxWidthRem - 32})
+      );
+    }
+  } @else {
+    #{$property}: calc(
+      #{$minSize + rem} + #{$addSize} * ((100vw - 32rem) / #{$maxWidthRem - 32})
+    );
+  }
+}
+
+@mixin br {
+  border: 2px solid red;
+}
+@mixin bb {
+  border: 2px solid blue;
+}
+
+$secondFont: "Montserrat", sans-serif;
