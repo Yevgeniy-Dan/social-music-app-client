@@ -959,7 +959,11 @@ const drop = async () => {
 };
 
 const create = async () => {
-  await User.bulkCreate(users);
+  await User.bulkCreate(
+    users.map((user, index) => {
+      return { ...user, id: index + 1 };
+    })
+  );
   console.log("Users table created successfully".green.underline);
   const updatedPosts = await getUnsplashImages();
   await Post.bulkCreate(updatedPosts);

@@ -19,6 +19,7 @@
     "fs": "^0.0.1-security",
     "mysql2": "^3.3.3",
     "path": "^0.12.7",
+    "pg": "^8.11.1",
     "sequelize": "^6.31.1"
   },
   "devDependencies": {
