@@ -10,22 +10,36 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "@rtk-query/graphql-request-base-query": "^2.2.0",
     "@types/node": "20.2.5",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
+    "async-mutex": "^0.4.0",
+    "axios": "^1.4.0",
     "clsx": "^1.2.1",
     "eslint-config-next": "13.4.4",
+    "framer-motion": "^10.12.21",
+    "graphql": "^16.7.1",
+    "graphql-request": "^6.1.0",
     "next": "13.4.4",
     "node-sass": "^9.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.2",
+    "react-masonry-css": "^1.0.16",
+    "react-redux": "^8.1.1",
     "sass": "^1.62.1",
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/react-responsive-masonry": "^2.1.0",
+    "autoprefixer": "^10.4.14",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
-    "prettier": "^2.8.8"
+    "postcss": "^8.4.25",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.3.2"
   }
 }
