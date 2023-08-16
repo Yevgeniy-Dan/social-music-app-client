@@ -1,19 +1,18 @@
-import { postsApi } from './api/postsApi';
 import { configureStore } from '@reduxjs/toolkit'
 // Or from '@reduxjs/toolkit/query/react'
 import authSlice  from './slices/authSlice';
+import commentSlice from './slices/commentSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
+    comment: commentSlice
     // Add the generated reducer as a specific top-level slice
-    [postsApi.reducerPath]: postsApi.reducer,
-
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(postsApi.middleware),
+    getDefaultMiddleware()
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

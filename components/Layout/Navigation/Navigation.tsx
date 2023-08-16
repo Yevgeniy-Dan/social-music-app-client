@@ -1,6 +1,12 @@
-import clsx from "clsx";
 import Link from "next/link";
 import React from "react";
+
+
+import { useDispatch } from "react-redux";
+
+import Search from "@/components/Search/Search";
+import { AppDispatch } from "@/redux/store";
+import { logOut } from "@/redux/slices/authSlice";
 
 import s from "./Navigation.module.scss";
 
@@ -32,14 +38,24 @@ const navs = [
 ];
 
 const Navigation = () => {
+  const dispatch = useDispatch<AppDispatch>();
   return (
-    <nav className='nav flex flex-col p-5 gap-5 mb-3'>
-      {navs.map(nav => {
-        return  <Link href={nav.href} className='flex gap-4 items-center'>
-          <img src={nav.icon} alt={nav.alt} /><span className="text-hero">{nav.text}</span>
-        </Link>;
+    <nav className="nav flex flex-col p-5 gap-5 mb-3">
+      {navs.map((nav, index) => {
+        return (
+          <Link key={index} href={nav.href} className="flex gap-4 items-center">
+            <img src={nav.icon} alt={nav.alt} />
+            <span className="text-hero">{nav.text}</span>
+          </Link>
+        );
       })}
-      <button className='flex items-center gap-4 mt-auto'><img src="/Logout.svg" alt="logout" /><span className="text-hero">Logout</span></button>
+      <Search />
+      <button
+        onClick={() => dispatch(logOut())}
+        className="flex items-center gap-4 mt-auto">
+        <img src="/Logout.svg" alt="logout" />
+        <span className="text-hero">Logout</span>
+      </button>
     </nav>
   );
 };

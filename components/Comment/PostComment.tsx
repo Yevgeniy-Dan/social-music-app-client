@@ -1,15 +1,16 @@
-import { useDispatch } from "react-redux";
+import { useDispatch } from 'react-redux'
 
-import { setNameForReply } from "@/redux/slices/commentSlice";
-import { AppDispatch } from "@/redux/store";
-import UserBage from "@/ui/UserBage";
-import { Comment } from "@/@types/graphql";
+import { setNameForReply } from '@/redux/slices/commentSlice'
+import { AppDispatch } from '@/redux/store'
+import UserBage from '@/ui/UserBage'
+import { Comment } from '@/@types/graphql'
+import { TRecursionComment } from '@/app/posts/[id]/page'
 
-const PostComment = ({ user, id, setReplyId, content, children }) => {
-  const dispatch = useDispatch<AppDispatch>();
+const PostComment = ({ user, id, content, children }: TRecursionComment) => {
+  const dispatch = useDispatch<AppDispatch>()
 
   const nested = children
-    ? children.map((comment: Comment, index: number) => {
+    ? children.map((comment, index: number) => {
         return (
           <PostComment
             key={comment.id}
@@ -18,22 +19,26 @@ const PostComment = ({ user, id, setReplyId, content, children }) => {
             content={comment.content}
             children={comment.children}
           />
-        );
+        )
       })
-    : null;
+    : null
 
   return (
     <>
       <div>
         <div className="flex items-center">
-          <UserBage {...user} />
+          <UserBage {...user!} />
           <div
             onClick={() =>
               dispatch(
-                setNameForReply({ replyId: id, replyUser: user.username })
+                setNameForReply({
+                  replyId: id || null,
+                  replyUser: user?.username || null,
+                })
               )
             }
-            className="ml-4 text-blueText underline">
+            className="ml-4 text-blueText underline"
+          >
             Reply
           </div>
         </div>
@@ -41,7 +46,7 @@ const PostComment = ({ user, id, setReplyId, content, children }) => {
       </div>
       <div className="ml-6">{nested}</div>
     </>
-  );
-};
+  )
+}
 
-export default PostComment;
+export default PostComment

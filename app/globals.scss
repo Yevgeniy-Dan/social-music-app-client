@@ -264,3 +264,9 @@ html {
 .bg-grad {
   background: linear-gradient(92.24deg, #36D1DC 0%, #5B86E5 100%);
 }
+
+.reply-username {
+  &:nth-child(3) {
+    color: #36D1DC;
+  }
+}
