@@ -10,8 +10,8 @@ interface AuthState {
 }
 // Define the initial state using that type
 const initialState: AuthState = {
-    user: localStorage.getItem('credential') === 'undefined' ?  null : JSON.parse(localStorage.getItem('credential') as string) as Partial<UserResponse> ,
-  access_token: localStorage.getItem('token') === 'undefined' ? null : localStorage.getItem('token')
+  user: null, 
+  access_token: null
 }
 
 export const authSlice = createSlice({
