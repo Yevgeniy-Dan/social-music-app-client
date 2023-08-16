@@ -31,7 +31,7 @@ const Home = () => {
   });
 
   useEffect(() => {
-    if (data) setPosts((prev) => prev.concat(data.posts));
+    if (data) setPosts((prev) => prev.concat(data.posts as []));
   }, [loading]);
 
   const addMorePosts = () => {
