@@ -10,7 +10,7 @@ interface AuthState {
 }
 // Define the initial state using that type
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem('credential') as string) as Partial<UserResponse> || null,
+    user: localStorage.getItem('credential') === 'undefined' ?  null : JSON.parse(localStorage.getItem('credential') as string) as Partial<UserResponse> ,
   access_token: localStorage.getItem('token') === 'undefined' ? null : localStorage.getItem('token')
 }
 
