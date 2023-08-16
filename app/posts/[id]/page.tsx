@@ -1,54 +1,54 @@
-'use client'
-import { useMutation, useQuery } from '@apollo/client'
+"use client";
+import { useMutation, useQuery } from "@apollo/client";
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter } from "next/navigation";
 
-import { FormEventHandler, useEffect, useState } from 'react'
+import { FormEventHandler, useEffect, useState } from "react";
 
-import { AnimatePresence, motion as m } from 'framer-motion'
+import { AnimatePresence, motion as m } from "framer-motion";
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 
-import PostComment from '@/components/Comment/PostComment'
-import OurLike from '@/ui/OurLike'
-import OurInput from '@/ui/OurInput'
-import UserBage from '@/ui/UserBage'
+import PostComment from "@/components/Comment/PostComment";
+import OurLike from "@/ui/OurLike";
+import OurInput from "@/ui/OurInput";
+import UserBage from "@/ui/UserBage";
 
-import { GET_POST } from '@/graphql/query/posts'
-import { CREATE_COMMENT } from '@/graphql/mutation/createComment'
+import { GET_POST } from "@/graphql/query/posts";
+import { CREATE_COMMENT } from "@/graphql/mutation/createComment";
 import {
   Comment,
   CommentResponse,
   MutationCreateCommentArgs,
-} from '@/@types/graphql'
+} from "@/@types/graphql";
 import {
   toggleShowAllComments,
   selectComment,
   clearReply,
-} from '@/redux/slices/commentSlice'
+} from "@/redux/slices/commentSlice";
 
-import { AppDispatch } from '@/redux/store'
+import { AppDispatch } from "@/redux/store";
 
 export interface TRecursionComment extends Partial<Comment> {
   children?: TRecursionComment[]
 }
 
 const PostPage = () => {
-  const [newComment, setNewComment] = useState('')
-  const { replyId, replyUser, showAllComments } = useSelector(selectComment)
-  const dispatch = useDispatch<AppDispatch>()
-  const params = useParams()
-  const navigate = useRouter()
+  const [newComment, setNewComment] = useState("");
+  const { replyId, replyUser, showAllComments } = useSelector(selectComment);
+  const dispatch = useDispatch<AppDispatch>();
+  const params = useParams();
+  const navigate = useRouter();
 
   useEffect(() => {
     return () => {
-      dispatch(clearReply())
-    }
-  }, [])
+      dispatch(clearReply());
+    };
+  }, []);
 
   const { data, loading } = useQuery(GET_POST, {
     variables: { id: params.id },
-  })
+  });
   const [addComment] = useMutation<CommentResponse, MutationCreateCommentArgs>(
     CREATE_COMMENT,
     {
@@ -59,21 +59,21 @@ const PostPage = () => {
         },
       ],
     }
-  )
+  );
 
-  let com1: TRecursionComment[] = []
+  let com1: TRecursionComment[] = [];
 
   if (data?.post.comments) {
     const recursion = (parentId: null | string): any => {
       return data?.post.comments
         .filter((c) => c.parentId === parentId)
-        .map((c) => ({ ...c, children: recursion(c.id) }))
-    }
-    com1 = recursion(null)
+        .map((c) => ({ ...c, children: recursion(c.id) }));
+    };
+    com1 = recursion(null);
   }
 
   const addNewComment: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     addComment({
       variables: {
         createCommentInput: {
@@ -82,10 +82,10 @@ const PostPage = () => {
           parentId: replyId,
         },
       },
-    })
-    setNewComment('')
-    dispatch(clearReply())
-  }
+    });
+    setNewComment("");
+    dispatch(clearReply());
+  };
 
   if (loading) {
     return (
@@ -122,15 +122,15 @@ const PostPage = () => {
         </div>
         <div className="h-12 bg-gray-100 rounded-[8px]"></div>
       </div>
-    )
+    );
   }
 
-  const commentsCount = showAllComments ? com1.length : 2
+  const commentsCount = showAllComments ? com1.length : 2;
 
   return (
     <div
       className={`bg-white rounded-[20px] flex flex-col p-5 ${
-        showAllComments ? '' : 'max-h-[94vh]'
+        showAllComments ? "" : "max-h-[94vh]"
       } relative`}
     >
       <div className="max-h-[480px] min-h-[300px] rounded-[15px] overflow-hidden flex items-center">
@@ -158,9 +158,10 @@ const PostPage = () => {
                 user={comment.user}
                 id={comment.id}
                 content={comment.content}
+                // eslint-disable-next-line
                 children={comment.children}
               />
-            )
+            );
           })}
       </div>
       {showAllComments ? (
@@ -187,7 +188,7 @@ const PostPage = () => {
           placeholder="Write your comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          submitIcon={'../Send.svg'}
+          submitIcon={"../Send.svg"}
         />
         {replyUser && (
           <span className="absolute inline-block bottom-[-10px] px-2 bg-white left-5 text-blueText">
@@ -208,7 +209,7 @@ const PostPage = () => {
         Back
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default PostPage
+export default PostPage;

@@ -28,7 +28,7 @@ const music_genres = [
   "Funk",
 ];
 
-const page = () => {
+const GenresPage = () => {
   const [input, setInput] = useState("");
   const [myGenres, setMyGenres] = useState<string[]>([]);
 
@@ -48,9 +48,12 @@ const page = () => {
         placeholder="Music genres..."
       />
       <div className="flex gap-2 my-4 flex-wrap">
-        {myGenres.map((item) => {
+        {myGenres.map((item, index) => {
           return (
-            <div className="border p-2 px-4 inline-flex items-center rounded-full bg-blueText text-white">
+            <div
+              key={index}
+              className="border p-2 px-4 inline-flex items-center rounded-full bg-blueText text-white"
+            >
               {item}
             </div>
           );
@@ -59,11 +62,14 @@ const page = () => {
           .filter((item) => !myGenres.includes(item))
           .filter((item) => item.toLowerCase().includes(input.toLowerCase()))
           .slice(0, 8)
-          .map((item) => {
+          .map((item, index) => {
             return (
               <div
+                key={index}
                 onClick={() => addMyGenres(item)}
-                className="border p-2 border-blueText inline-flex items-center rounded-full hover:bg-blueText hover:text-white transition-all ease-in">
+                className="border p-2 border-blueText inline-flex items-center rounded-full hover:bg-blueText
+                hover:text-white transition-all ease-in"
+              >
                 <img src="/Plus.svg" alt="" />
                 <span className="pr-3">{item}</span>
               </div>
@@ -76,4 +82,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default GenresPage;
