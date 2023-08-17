@@ -7,7 +7,6 @@ const Search = () => {
 
   const searchFriend: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
   };
 
   return (
