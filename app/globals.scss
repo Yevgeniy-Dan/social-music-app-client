@@ -129,6 +129,8 @@ body {
   font-size: 14px;
   font-family: 'Poppins', sans-serif;
   color: #494949;
+  overflow-x: hidden;
+  padding: 0 calc(20px - (100vw - 100%)) 0 0;
 }
 //! временно
 html {
@@ -210,8 +212,7 @@ html {
 }
 
 .grid-item {
-  width: 100%;
-  margin-bottom: 24px; /* Adjust margin as needed */
+  width: 100%; /* Adjust margin as needed */
 }
 
 .grid-item > img {

@@ -1,23 +1,19 @@
-import React, { FC } from "react";
-
+import { FC } from 'react'
 interface IOurInput extends React.InputHTMLAttributes<HTMLInputElement> {
-  submitIcon?: string;
+  submitIcon?: string
 }
 
 const OurInput: FC<IOurInput> = ({ submitIcon, ...props }) => {
-  const disabledStyle = props.disabled ? "opacity-5" : "";
-
   return (
-    <div
-      className={`relative bg-white border border-border rounded-[15px] flex`}>
-      <input {...props} className="w-full p-5 reply-username" />
+    <div className={`w-full relative flex p-5 border border-border rounded-[15px]`}>
+      <input {...props} />
       {submitIcon && (
-        <button className="mr-4 flex items-center" type="submit">
+        <button className="absolute right-[20px]" type="submit">
           <img src={submitIcon} alt={submitIcon} />
         </button>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default OurInput;
+export default OurInput

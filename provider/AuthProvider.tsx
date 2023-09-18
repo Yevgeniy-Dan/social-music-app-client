@@ -1,19 +1,24 @@
-"use client";
-import { RootState } from "@/redux/store";
-import { useRouter } from "next/navigation";
-import React, { ReactNode, useLayoutEffect } from "react";
-import { useSelector } from "react-redux";
+'use client'
+import { RootState } from '@/redux/store'
+import { usePathname, useRouter } from 'next/navigation'
+import React, { ReactNode, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const accessToken = useSelector<RootState>(
-    (state) => state.auth.access_token
-  );
-  const navigate = useRouter();
+  const accessToken = useSelector<RootState>((state) => state.auth.access_token)
+  const navigate = useRouter()
+  const pathname = usePathname()
 
-  useLayoutEffect(() => {
-    if (!accessToken) navigate.push("/auth");
-  }, [accessToken]);
-  return <div>{children}</div>;
-};
+  useEffect(() => {
+    if (pathname === '/') return
+    if (!accessToken) navigate.push('/auth')
+  }, [pathname, accessToken])
 
-export default AuthProvider;
+  return (
+    <>
+      {pathname.startsWith('/auth') || pathname === '/' || accessToken ? children : null}
+    </>
+  )
+}
+
+export default AuthProvider

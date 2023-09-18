@@ -1,17 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
-import { UserResponse } from '@/@types/graphql';
+import { User, UserResponse } from '@/@types/graphql';
 
 // Define a type for the slice state
 interface AuthState {
   user: Partial<UserResponse> | null;
   access_token: string | null;
 }
+
 // Define the initial state using that type
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem('credential') as string) as Partial<UserResponse> || null,
-  access_token: localStorage.getItem('token') === 'undefined' ? null : localStorage.getItem('token')
+  user: null,
+  access_token: null
 }
 
 export const authSlice = createSlice({
@@ -22,19 +23,18 @@ export const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<AuthState>) => {
       state.user = action.payload.user
       state.access_token = action.payload.access_token
-      localStorage.setItem('credential', JSON.stringify(action.payload.user))
-      localStorage.setItem('token', JSON.stringify(action.payload.access_token))
     },
     logOut: (state) => {
       state.user = null; 
       state.access_token = null; 
-      localStorage.removeItem('credential')
-      localStorage.removeItem('token')
+    }, 
+    updateProfile: (state, action: PayloadAction<Partial<UserResponse>>) => {
+      state.user = {...state.user, ...action.payload }
     }
   }
 })
 
-export const { setCredentials, logOut } = authSlice.actions
+export const { setCredentials, logOut, updateProfile } = authSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectAuth = (state: RootState) => state.auth
