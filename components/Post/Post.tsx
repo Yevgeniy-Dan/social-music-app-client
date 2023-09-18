@@ -2,47 +2,56 @@
 
 import Link from "next/link";
 
+import { usePathname } from "next/navigation";
+
+import { memo } from "react";
+
 import { PostResponse } from "@/@types/graphql";
 import OurLike from "@/ui/OurLike";
+import UserBage from "@/ui/UserBage";
 
-const Post = ({ props }: { props: PostResponse }) => {
-  const genre: string[] = props.user.musicGenres
-    ? JSON.parse(props.user.musicGenres)
-    : "";
+// eslint-disable-next-line no-unused-vars
+const Post = (props: PostResponse & { deletePost?: (postId: string) => void }) => {
+  const pathname = usePathname();
+
+  if (!props) return;
 
   return (
-    <div className="rounded-[20px] p-5 bg-white h-auto grid-item">
+    <div className="h-auto grid-item">
       <Link href={`/posts/${props.id}`}>
         <div className="rounded-[15px] overflow-hidden mb-4">
-          <img
-            className="w-full object-cover max-h-[360px]"
-            src={props.mediaUrl}
-            alt="ava"
-          />
+          {props.mediaUrl ? (
+            <img
+              className="w-full object-cover max-h-[360px] min-h-[300px]"
+              src={props.mediaUrl}
+              alt="ava"
+            />
+          ) : (
+            <div className="w-full h-[360px] bg-gray-300 object-cover"></div>
+          )}
         </div>
       </Link>
       <div className="flex">
-        <div className="w-11 h-11 overflow-hidden rounded-full mr-4">
-          <img
-            className="h-full object-cover"
-            src={props?.user?.avatar!}
-            alt=""
-          />
+        <div className="mr-auto">
+          <UserBage {...props.user} />
         </div>
-        <div className="flex flex-col gap-1 mr-auto">
-          <span>{props?.user?.username}</span>
-          <span className="text-secondText text-xs">
-            {genre &&
-              genre.map((item, index) => (
-                <span key={index} className="mr-1">
-                  {item}
-                </span>
-              ))}
-          </span>
-        </div>
+        {pathname === "/profile" ? (
+          <>
+            <div className="flex items-center justify-center mr-7">
+              <img src="/Edit.svg" alt="" />
+            </div>
+            <div
+              onClick={() => props.deletePost(props.id)}
+              className="flex items-center justify-center mr-7"
+            >
+              <img src="/Delete.svg" alt="" />
+            </div>
+          </>
+        ) : null}
+
         <div className="flex gap-2 items-center mr-5">
           <span>{props.totalComments}</span>
-          <img src="./Comment.svg" alt="Comment" />
+          <img src="/Comment.svg" alt="Comment" />
         </div>
         <OurLike postId={props.id} />
       </div>
@@ -50,4 +59,4 @@ const Post = ({ props }: { props: PostResponse }) => {
   );
 };
 
-export default Post;
+export default memo(Post);

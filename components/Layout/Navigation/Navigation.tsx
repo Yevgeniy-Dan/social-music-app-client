@@ -1,14 +1,13 @@
 import Link from "next/link";
 import React from "react";
 
+import { useDispatch, useSelector } from "react-redux";
 
-import { useDispatch } from "react-redux";
+import { usePathname } from "next/navigation";
 
 import Search from "@/components/Search/Search";
 import { AppDispatch } from "@/redux/store";
-import { logOut } from "@/redux/slices/authSlice";
-
-import s from "./Navigation.module.scss";
+import { logOut, selectAuth } from "@/redux/slices/authSlice";
 
 const navs = [
   {
@@ -39,6 +38,8 @@ const navs = [
 
 const Navigation = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const pathname = usePathname();
+  const { user } = useSelector(selectAuth);
   return (
     <nav className="nav flex flex-col p-5 gap-5 mb-3">
       {navs.map((nav, index) => {
@@ -49,10 +50,11 @@ const Navigation = () => {
           </Link>
         );
       })}
-      <Search />
+      {pathname.startsWith("/search") || !user ? null : <Search />}
       <button
         onClick={() => dispatch(logOut())}
-        className="flex items-center gap-4 mt-auto">
+        className="flex items-center gap-4 mt-auto"
+      >
         <img src="/Logout.svg" alt="logout" />
         <span className="text-hero">Logout</span>
       </button>

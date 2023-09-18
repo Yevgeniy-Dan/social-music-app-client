@@ -5,8 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 
 import { FormEventHandler, useEffect, useState } from "react";
 
-import { AnimatePresence, motion as m } from "framer-motion";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import PostComment from "@/components/Comment/PostComment";
@@ -16,11 +14,7 @@ import UserBage from "@/ui/UserBage";
 
 import { GET_POST } from "@/graphql/query/posts";
 import { CREATE_COMMENT } from "@/graphql/mutation/createComment";
-import {
-  Comment,
-  CommentResponse,
-  MutationCreateCommentArgs,
-} from "@/@types/graphql";
+import { Comment, CommentResponse, MutationCreateCommentArgs } from "@/@types/graphql";
 import {
   toggleShowAllComments,
   selectComment,
@@ -44,11 +38,13 @@ const PostPage = () => {
     return () => {
       dispatch(clearReply());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { data, loading } = useQuery(GET_POST, {
     variables: { id: params.id },
   });
+
   const [addComment] = useMutation<CommentResponse, MutationCreateCommentArgs>(
     CREATE_COMMENT,
     {
@@ -125,7 +121,7 @@ const PostPage = () => {
     );
   }
 
-  const commentsCount = showAllComments ? com1.length : 2;
+  const commentsCount = showAllComments ? data?.post.comments.length : 2;
 
   return (
     <div
@@ -151,7 +147,7 @@ const PostPage = () => {
       <div className="h-[1px] bg-[#f0f0f0] mb-4"></div>
       <div className="overflow-hidden">
         {com1 &&
-          com1.slice(0, commentsCount).map((comment, index) => {
+          com1.slice(0, commentsCount).map((comment) => {
             return (
               <PostComment
                 key={comment.id}
@@ -173,7 +169,7 @@ const PostPage = () => {
             Hide more
           </button>
         </div>
-      ) : (
+      ) : data?.post?.comments.length > 2 ? (
         <div className="h-[165px] bg-gradient-to-b from-transparent to-white absolute bottom-[75px] left-0 right-0 z-10 flex justify-center items-end pb-4">
           <button
             onClick={() => dispatch(toggleShowAllComments())}
@@ -182,7 +178,7 @@ const PostPage = () => {
             Show more
           </button>
         </div>
-      )}
+      ) : null}
       <form className="relative" onSubmit={(e) => addNewComment(e)}>
         <OurInput
           placeholder="Write your comment..."

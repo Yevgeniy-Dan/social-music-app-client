@@ -5,10 +5,9 @@
     "no-unused-vars": "warn",
     "quotes": ["warn", "double"],
     "indent": ["warn", 2],
-    "max-len": ["warn", { "code": 140 }],
     "comma-dangle": ["warn", "always-multiline"],
     "semi": ["warn", "always"],
-
+    "@next/next/no-img-element": "off",
     // імпорти
     "import/order": [
       "warn",

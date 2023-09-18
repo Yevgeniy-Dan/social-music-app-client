@@ -2,19 +2,11 @@
 
 import { motion as m } from "framer-motion";
 import { FieldValues, useForm } from "react-hook-form";
-import {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { useRouter } from "next/navigation";
 import { useMutation } from "@apollo/client";
-
-import axios from "axios";
 
 import { setCredentials } from "@/redux/slices/authSlice";
 import { SET_LOG_IN, SET_SIGN_UP } from "@/graphql/mutation/auth";
@@ -24,71 +16,32 @@ import {
   SignUpMutation,
   SignUpMutationVariables,
 } from "@/@types/graphql";
+import OurError from "@/ui/OurError";
+
+import { inputRegister } from "./inputRegister";
 
 const Auth = () => {
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onChange" });
   const [auth, setAuth] = useState(false);
-  const [uploadFile, setUploadFile] = useState<File | null>(null);
-  const [UrlFile, setUrlFile] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [repeatPassword, setRepeatPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const [signup, { loading: isLoad, error: isErr }] = useMutation<
-    SignUpMutation,
-    SignUpMutationVariables
-  >(SET_SIGN_UP);
-  const [login, { data, loading, error }] = useMutation<
-    LogInMutation,
-    LogInMutationVariables
-  >(SET_LOG_IN);
-
-  useEffect(() => {
-    // const sendAvatar = async () => {
-    //   const res = await axios.post(
-    //     "https://social-music-upload-server-port.up.railway.app/api/post/create",
-    //     {
-    //       media: uploadFile,
-    //     }
-    //   );
-    //   return res;
-    // };
-    // const data = sendAvatar();
-    // setUrlFile(data);
-  }, [uploadFile]);
-
-  if (!loading) {
-    if (data) {
-      dispatch(
-        setCredentials({
-          user: data?.login.user,
-          access_token: data?.login.accessToken,
-        })
-      );
-    }
-  }
-
-  if (errors) {
-    console.log(errors);
-  }
+  const [signup] = useMutation<SignUpMutation, SignUpMutationVariables>(SET_SIGN_UP);
+  const [login, { error }] = useMutation<LogInMutation, LogInMutationVariables>(
+    SET_LOG_IN
+  );
 
   const changeAuth: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     setAuth((prev) => !prev);
   };
 
-  const handleAvatar: ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target.files) {
-      setUploadFile(e.target.files[0]);
-    }
-  };
-
   const submitForm = async (e: FieldValues) => {
-    const { username, email, password, avatar } = e;
-    console.log(username, email, password, avatar);
+    const { username, email, password } = e;
     if (!auth) {
       await login({
         variables: {
@@ -97,14 +50,16 @@ const Auth = () => {
             password,
           },
         },
+        onCompleted: (e) => {
+          dispatch(
+            setCredentials({
+              user: e.login.user || null,
+              access_token: e.login.accessToken || null,
+            })
+          );
+          e.login.user.avatar ? navigate.push("/") : navigate.push("/auth/avatar");
+        },
       });
-      dispatch(
-        setCredentials({
-          user: data?.login.user || null,
-          access_token: data?.login.accessToken || null,
-        })
-      );
-      navigate.push("/");
     } else {
       await signup({
         variables: {
@@ -115,98 +70,104 @@ const Auth = () => {
           },
         },
       });
+      setAuth(false);
     }
-    setAuth((prev) => !prev);
-  };
-
-  const pickFile = () => {
-    inputRef.current?.click();
   };
 
   return (
     <>
+      {error && <OurError error={error} />}
       <m.div
         layout="position"
         transition={{ delay: 0.5 }}
         exit={{ opacity: 0, x: 20 }}
-        className="w-[500px] rounded-[30px] flex flex-col bg-white px-6 py-8">
-        <h3 className="text-2xl font-bold mb-4 text-center">
+        className="w-[500px] rounded-[30px] flex flex-col bg-white px-6 py-8"
+      >
+        <h3 className="mb-4 text-2xl font-bold text-center">
           {auth ? "REGISTER" : "SIGN IN"}
         </h3>
         <form onSubmit={handleSubmit(submitForm)}>
           {auth && (
-            <m.input
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ delay: 0.2 }}
-              {...register("username", { minLength: 2, maxLength: 20 })}
-              className="w-full p-5 border border-border rounded-[15px]"
-              type="text"
-              placeholder="Name"
-            />
-          )}
-          {errors.username ? (
-            <div className="w-full text-red-500">Не правильный Login</div>
-          ) : null}
-          <input
-            {...register("email", {
-              pattern:
-                /^((([0-9A-Za-z]{1}[-0-9A-z\.]{1,}[0-9A-Za-z]{1})|([0-9А-Яа-я]{1}[-0-9А-я\.]{1,}[0-9А-Яа-я]{1}))@([-A-Za-z]{1,}\.){1,2}[-A-Za-z]{2,})$/u,
-            })}
-            className="w-full p-5 mt-5 border border-border rounded-[15px]"
-            placeholder="E-mail"
-          />
-          {errors.email ? (
-            <div className="w-full text-red-500">Не правильный имейл</div>
-          ) : null}
-          <input
-            {...register("password", {
-              // pattern: /((?=.\d)|(?=.\W+))(?![.\n])(?=.[A-Z])(?=.[a-z]).*$/,
-              minLength: 8,
-              maxLength: 32,
-            })}
-            className="w-full p-5 mt-5 border border-border rounded-[15px]"
-            type="password"
-            placeholder="Password"
-          />
-          {errors.password ? (
-            <div className="w-full text-red-500">
-              {errors?.password?.message as string}
+            <div className="relative">
+              <m.input
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ delay: 0.2 }}
+                {...register("username", inputRegister.username)}
+                className={`w-full p-5 border ${
+                  errors.username ? "border-red-500" : "border-border"
+                } rounded-[15px]`}
+                type="text"
+                placeholder="Name"
+              />
+              {errors.username ? (
+                <span className="text-red-500 absolute bottom-[-10px] right-6 bg-white px-4">
+                  {errors.username.message as string}
+                </span>
+              ) : null}
             </div>
-          ) : null}
-          <input
-            {...register("avatar", {
-              // required: true,
-            })}
-            ref={inputRef}
-            onChange={(e) => handleAvatar(e)}
-            className="hidden"
-            type="file"
-          />
+          )}
+          <div className="relative mt-5">
+            <input
+              {...register("email", inputRegister.email)}
+              className={`w-full p-5 border ${
+                errors.email ? "border-red-500" : "border-border"
+              } rounded-[15px]`}
+              placeholder="E-mail"
+            />
+            {errors.email ? (
+              <div className="text-red-500 absolute bottom-[-10px] right-6 bg-white px-4">
+                Не правильный имейл
+              </div>
+            ) : null}
+          </div>
+          <div className="relative mt-5">
+            <input
+              {...register("password", inputRegister.password)}
+              className={`w-full p-5 border ${
+                errors.password ? "border-red-500" : "border-border"
+              } rounded-[15px]`}
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              type="password"
+              placeholder="Password"
+            />
+            {errors.password ? (
+              <div className="text-red-500 absolute bottom-[-10px] right-6 bg-white px-4">
+                Не правильный пароль
+              </div>
+            ) : null}
+          </div>
           {auth && (
-            <m.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ delay: 0.2 }}
-              className="flex items-center justify-between mt-4">
-              <button
-                className="rounded-full border py-2 px-9 border-blueText text-blueText"
-                onClick={(e) => pickFile()}>
-                Choose Avatar image
-              </button>
-              <span>{uploadFile?.name}</span>
-            </m.div>
+            <div className="relative mt-5">
+              <input
+                {...register("repeatPassword", {
+                  pattern: new RegExp(repeatPassword, "g"),
+                  required: true,
+                })}
+                className={`w-full p-5 border ${
+                  errors.repeatPassword ? "border-red-500" : "border-border"
+                } rounded-[15px]`}
+                type="password"
+                placeholder="Repeat password"
+              />
+              {errors.repeatPassword ? (
+                <div className="text-red-500 absolute bottom-[-10px] right-6 bg-white px-4">
+                  Не правильный пароль
+                </div>
+              ) : null}
+            </div>
           )}
           <button
             type="submit"
-            className="text-white text-base font-bold w-full py-4 mt-5 bg-grad rounded-[15px]">
+            className="text-white text-base font-bold w-full py-4 mt-5 bg-grad rounded-[15px]"
+          >
             {auth ? "REGISTER" : "SIGN IN"}
           </button>
           <button
             onClick={(e) => changeAuth(e)}
-            className="text-base font-bold uppercase w-full pt-4 text-blueText underline">
+            className="w-full pt-4 text-base font-bold underline uppercase text-blueText"
+          >
             {auth ? "SIGN IN" : "REGISTER"}
           </button>
         </form>

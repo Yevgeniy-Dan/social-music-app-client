@@ -3,14 +3,13 @@ import { useDispatch } from "react-redux";
 import { setNameForReply } from "@/redux/slices/commentSlice";
 import { AppDispatch } from "@/redux/store";
 import UserBage from "@/ui/UserBage";
-import { Comment } from "@/@types/graphql";
 import { TRecursionComment } from "@/app/posts/[id]/page";
 
 const PostComment = ({ user, id, content, children }: TRecursionComment) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const nested = children
-    ? children.map((comment, index: number) => {
+    ? children.map((comment) => {
       return (
         <PostComment
           key={comment.id}
@@ -28,7 +27,7 @@ const PostComment = ({ user, id, content, children }: TRecursionComment) => {
     <>
       <div>
         <div className="flex items-center">
-          <UserBage {...user!} />
+          <UserBage {...user} />
           <div
             onClick={() =>
               dispatch(

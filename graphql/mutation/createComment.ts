@@ -7,7 +7,6 @@ export const CREATE_COMMENT = gql(`
       user {
         avatar
         id
-        musicGenres
       }
       content
     }

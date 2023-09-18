@@ -11,7 +11,6 @@ export const GET_POSTS = gql(`
       user {
         username
         avatar
-        musicGenres
       }
     }
   }
@@ -27,7 +26,6 @@ export const GET_POST = gql(`
         avatar
         id
         username
-        musicGenres
       }
       totalLikes
       totalComments
@@ -54,3 +52,5 @@ export const GET_POST_ISLIKE = gql(`
     }
   }
 `)
+
+
