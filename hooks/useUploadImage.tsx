@@ -23,8 +23,8 @@ const useUploadImage = (typeFile: TFile) => {
     typeFile === 'avatar'
       ? // ? process.env.STORAGE_AVATARS || 'http://localhost:5050/api/user/avatar/create'
         // : process.env.STORAGE_POSTS || 'http://localhost:5050/api/post/create'
-        process.env.STORAGE_AVATARS
-      : process.env.STORAGE_POSTS
+        process.env.NEXT_PUBLIC_STORAGE_AVATARS
+      : process.env.NEXT_PUBLIC_STORAGE_POSTS
 
   useEffect(() => {
     // if (user?.avatar) navigate.push('/')

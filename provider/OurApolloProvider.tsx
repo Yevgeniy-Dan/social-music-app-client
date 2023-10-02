@@ -13,7 +13,7 @@ import React, { ReactNode } from 'react'
 
 const httpLink = new HttpLink({
   // uri: process.env.GRAPHQL || 'http://localhost:8080/graphql',
-  uri: process.env.GRAPHQL,
+  uri: process.env.NEXT_PUBLIC_GRAPHQL,
   credentials: 'include',
 })
 
