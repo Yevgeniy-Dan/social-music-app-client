@@ -123,14 +123,26 @@ ul {
   padding: 0;
 }
 
+
+
 html,
 body {
+  .bg-body {
+    background-image: url('/BigCircle.svg');
+    background-position: center; 
+    background-repeat: no-repeat;
+  }
+  width:100vw;
   background: var(--bg);
   font-size: 14px;
+  scroll-behavior: smooth;
   font-family: 'Poppins', sans-serif;
   color: #494949;
+  margin-right: calc(-1 * (100vw - 100%));
   overflow-x: hidden;
-  padding: 0 calc(20px - (100vw - 100%)) 0 0;
+  @media (max-width: 575.98px){
+    font-size: 12px;
+  }
 }
 //! временно
 html {
@@ -143,21 +155,6 @@ html {
   --header: #0b0d0f;
   --error: #800404;
 }
-// !
-// html[data-theme="dark"] {
-//   --text: #ffffff;
-//   --bg: #030507;
-//   --black: #000000;
-//   --header: #0b0d0f;
-//   --error: #800404;
-// }
-// html[data-theme="light"] {
-//   --text: #1b1818;
-//   --bg: #fff;
-//   --black: #000000;
-//   --header: #fff;
-//   --error: #800404;
-// }
 
 @mixin second-bg {
   background: #FFFFFF;
@@ -184,6 +181,9 @@ html {
 }
 
 @media (min-width: 991.98px) {
+  .aside {
+    display: none;
+  }
   .container {
     max-width: 960px;
   }
@@ -231,6 +231,7 @@ html {
 .nav {
   @include second-bg();
   flex: 1;
+
 }
 .user-bage {
 
@@ -244,12 +245,23 @@ html {
   flex-direction: column;
   gap: 24px;
   height: calc(100vh - 36px);
+
+  @media (max-width: 990px) {
+    min-width: 100%;
+    justify-content: space-between;
+    align-items: stretch;
+    left: 0;
+    height: auto;
+  }
 }
 .main {
   width: calc(100% - 20vw - 24px);
   margin-left: auto;
   @media (min-width: 1400px) {
     width: calc(100% - 270px - 24px);
+  }
+  @media (max-width: 990px) {
+    width: 100%;
   }
 }
 
@@ -270,4 +282,10 @@ html {
   &:nth-child(3) {
     color: #36D1DC;
   }
+}
+
+.bg-bage-image {
+  background-image: url('/SmallCircle.svg');
+  background-position: center -5px; 
+  background-repeat: no-repeat;
 }

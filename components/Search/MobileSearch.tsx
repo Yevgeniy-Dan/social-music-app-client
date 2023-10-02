@@ -37,7 +37,7 @@ const Search = () => {
   }
 
   return (
-    <div className="lg:absolute lg:w-full lg:l-0 lg:bottom-20 lg:bg-white lg:p-4 lg:hidden">
+    <div className="hidden lg:absolute lg:w-full lg:l-0 lg:bottom-20 lg:bg-white lg:p-4 lg:block">
       <form
         className="relative"
         onChange={(e) => searchFriend(e)}

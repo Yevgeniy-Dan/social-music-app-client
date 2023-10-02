@@ -1,41 +1,39 @@
-"use client";
+'use client'
 
-import Link from "next/link";
+import Link from 'next/link'
 
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation'
 
-import { memo } from "react";
+import { memo } from 'react'
 
-import { PostResponse } from "@/@types/graphql";
-import OurLike from "@/ui/OurLike";
-import UserBage from "@/ui/UserBage";
+import { PostResponse } from '@/@types/graphql'
+import OurLike from '@/ui/OurLike'
+import UserBage from '@/ui/UserBage'
+import Image from 'next/image'
 
 // eslint-disable-next-line no-unused-vars
 const Post = (props: PostResponse & { deletePost?: (postId: string) => void }) => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
-  if (!props) return;
+  if (!props) return
 
   return (
-    <div className="h-auto grid-item">
+    <div className="h-auto grid-item flex flex-col">
+      <div className="mr-auto mb-4">
+        <UserBage {...props.user} />
+      </div>
       <Link href={`/posts/${props.id}`}>
         <div className="rounded-[15px] overflow-hidden mb-4">
-          {props.mediaUrl ? (
-            <img
-              className="w-full object-cover max-h-[360px] min-h-[300px]"
-              src={props.mediaUrl}
-              alt="ava"
-            />
-          ) : (
-            <div className="w-full h-[360px] bg-gray-300 object-cover"></div>
-          )}
+          {/* <img
+            className="w-full object-cover max-h-[360px] min-h-[300px]"
+            src={props.mediaUrl}
+            alt="ava"
+          /> */}
+          <Image src={props.mediaUrl} width={900} height={600} alt="Post image" />
         </div>
       </Link>
-      <div className="flex">
-        <div className="mr-auto">
-          <UserBage {...props.user} />
-        </div>
-        {pathname === "/profile" ? (
+      <div className="flex self-end">
+        {pathname === '/profile' ? (
           <>
             <div className="flex items-center justify-center mr-7">
               <img src="/Edit.svg" alt="" />
@@ -56,7 +54,7 @@ const Post = (props: PostResponse & { deletePost?: (postId: string) => void }) =
         <OurLike postId={props.id} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default memo(Post);
+export default memo(Post)

@@ -1,41 +1,44 @@
-"use client";
+'use client'
 
-import Masonry from "react-masonry-css";
+import Masonry from 'react-masonry-css'
 
-import { useQuery } from "@apollo/client";
+import { useQuery } from '@apollo/client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from 'react-infinite-scroll-component'
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'
 
-import Post from "@/components/Post/Post";
-import { GET_POSTS } from "@/graphql/query/posts";
-import { GetPostsQuery, GetPostsQueryVariables, PostResponse } from "@/@types/graphql";
-import { addPosts, postsComment } from "@/redux/slices/postsSlice";
-import { AppDispatch } from "@/redux/store";
+import Post from '@/components/Post/Post'
+import { GET_POSTS } from '@/graphql/query/posts'
+import { GetPostsQuery, GetPostsQueryVariables, PostResponse } from '@/@types/graphql'
+import { addPosts, postsComment } from '@/redux/slices/postsSlice'
+import { AppDispatch } from '@/redux/store'
 
 const Home = () => {
-  const [pageCount, setPageCount] = useState(1);
-  const { posts } = useSelector(postsComment);
-  const dispatch = useDispatch<AppDispatch>();
+  const [pageCount, setPageCount] = useState(1)
+  const { posts } = useSelector(postsComment)
+  const dispatch = useDispatch<AppDispatch>()
+
+  console.log('🚀 ~ file: page.tsx:25 ~ Home ~ posts:', posts)
 
   const { refetch } = useQuery<GetPostsQuery, GetPostsQueryVariables>(GET_POSTS, {
     variables: {
       page: pageCount,
     },
     onCompleted: (e) => {
-      dispatch(addPosts(e.posts));
+      dispatch(addPosts(e.posts))
     },
-  });
+  })
 
   const addMorePosts = () => {
-    setPageCount((prev) => prev + 1);
-    refetch({ page: pageCount });
-  };
+    setPageCount((prev) => prev + 1)
+    refetch({ page: pageCount })
+  }
 
-  if (!posts.length) return;
+  if (!posts.length) return
+  console.log(window.screen.width)
 
   return (
     <div>
@@ -44,9 +47,10 @@ const Home = () => {
         dataLength={posts.length}
         next={addMorePosts}
         hasMore={true}
+        endMessage={<div>End</div>}
       >
         <Masonry
-          breakpointCols={{ default: 2 }} // Number of columns at different breakpoints
+          breakpointCols={{ default: window.screen.width < 770 ? 1 : 2 }} // Number of columns at different breakpoints
           className="masonry-grid"
           columnClassName="masonry-grid-column"
         >
@@ -59,7 +63,7 @@ const Home = () => {
         </Masonry>
       </InfiniteScroll>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

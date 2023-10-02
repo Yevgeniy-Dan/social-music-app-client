@@ -1,21 +1,21 @@
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux'
 
-import { selectAuth } from "@/redux/slices/authSlice";
-import useUploadImage from "@/app/hooks/useUploadImage";
+import { selectAuth } from '@/redux/slices/authSlice'
+import useUploadImage from '@/hooks/useUploadImage'
 
-import NoAuthUserInfo from "./NotAuthUserInfo";
+import NoAuthUserInfo from './NotAuthUserInfo'
 
-const hesh = ["#guitar", "#jazz", "#modern"];
+const hesh = ['#guitar', '#jazz', '#modern']
 
 const UserInfo = () => {
-  const { user } = useSelector(selectAuth);
-  const { handleAvatar, inputRef, pickFile } = useUploadImage("avatar");
+  const { user } = useSelector(selectAuth)
+  const { handleAvatar, inputRef, pickFile } = useUploadImage('avatar')
 
   return (
-    <div className="user-bage flex flex-col items-center p-5">
+    <div className="user-bage flex flex-col items-center p-5 lg:hidden bg-bage-image">
       {user ? (
         <>
-          <div className="relative mt-3 mb-6">
+          <div className="relative mt-3 mb-6 overflow-hidden">
             <div className="h-[140px] w-[140px] overflow-hidden rounded-full">
               <img className="h-full object-cover" src={user?.avatar} alt="ava" />
             </div>
@@ -32,7 +32,7 @@ const UserInfo = () => {
               type="file"
             />
           </div>
-          <div className="border border-border rounded-[15px] p-3 flex flex-col items-center w-full">
+          <div className="border border-border rounded-[15px] p-3 flex flex-col items-center w-full bg-white">
             <h3 className="text-hero text-mainText py-1 font-semibold">
               {user?.username}
             </h3>
@@ -53,12 +53,16 @@ const UserInfo = () => {
               Edit Profile
             </button>
           </div>
+          {/* <img
+            className="absolute inset-0 w-full h-full top-[-55px]"
+            src="/SmallCircle.svg"
+          /> */}
         </>
       ) : (
         <NoAuthUserInfo />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default UserInfo;
+export default UserInfo

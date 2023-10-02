@@ -19,8 +19,8 @@ export const commentSlice = createSlice({
   name: 'comment', 
   initialState,
   reducers: {
-    toggleShowAllComments: (state) => { 
-      state.showAllComments = !state.showAllComments
+    toggleShowAllComments: (state, action: PayloadAction<boolean>) => { 
+      state.showAllComments = action.payload
     },
     setReplyId: (state, action: PayloadAction<string | null>) => {
       state.replyId = action.payload

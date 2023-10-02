@@ -1,11 +1,13 @@
-import React from "react";
+import React from 'react'
 
-import Auth from "@/components/Auth/Auth";
+import Auth from '@/components/Auth/Auth'
 
 const page = () => {
   return (
-    <Auth/>
-  );
-};
+    <>
+      <Auth />
+    </>
+  )
+}
 
-export default page;
+export default page
