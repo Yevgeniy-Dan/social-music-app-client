@@ -12,7 +12,8 @@ import { onError } from '@apollo/client/link/error'
 import React, { ReactNode } from 'react'
 
 const httpLink = new HttpLink({
-  uri: process.env.GRAPHQL || 'http://localhost:8080/graphql',
+  // uri: process.env.GRAPHQL || 'http://localhost:8080/graphql',
+  uri: process.env.GRAPHQL,
   credentials: 'include',
 })
 
