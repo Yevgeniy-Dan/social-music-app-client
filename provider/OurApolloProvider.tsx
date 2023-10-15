@@ -54,7 +54,9 @@ const getNewToken = async () => {
       data.refresh.accessToken
     )
     return data.refresh.accessToken
-  } catch (error) {}
+  } catch (error) {
+    return
+  }
 }
 
 const errorLink = onError(({ graphQLErrors, operation, forward }) => {
