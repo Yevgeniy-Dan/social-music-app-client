@@ -21,6 +21,7 @@ import OurButton from '@/ui/OurButton'
 
 import useUploadImage from '../../hooks/useUploadImage'
 import UpdateProfile from '@/components/UpdateProfile/UpdateProfile'
+import { useRouter } from 'next/navigation'
 
 const Profile = () => {
   const { user } = useSelector(selectAuth)
@@ -30,18 +31,18 @@ const Profile = () => {
     pickFile,
     loading: postUploadLoading,
   } = useUploadImage('post')
-
-  useEffect(() => {
-    if (postUploadLoading) {
-      refetch({ username: user?.username })
-    }
-  }, [postUploadLoading])
+  const navigate = useRouter()
 
   const { data, loading, refetch } = useQuery<{ user: User }, QueryUserArgs>(GET_USER, {
     variables: {
       username: user?.username,
     },
   })
+
+  useEffect(() => {
+    refetch()
+  }, [postUploadLoading])
+
   console.log('🚀 ~ file: page.tsx:45 ~ Profile ~ data:', data?.user?.posts)
 
   if (loading) <Loader />

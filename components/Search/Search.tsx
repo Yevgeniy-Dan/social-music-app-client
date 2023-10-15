@@ -19,9 +19,10 @@ const Search = () => {
   const { refetch: refetchName, loading: loadingName } = useQuery<
     { searchByName: SearchResponse[] },
     SearchNameQueryVariables
-  >(GET_USER_BY_NAME, { onCompleted: (e) => setFoundUsers(e.searchByName) })
+  >(GET_USER_BY_NAME, { onCompleted: (e) => setFoundUsers(e.searchByName), skip: true })
   const { refetch: refetchHash, loading: loadingHash } = useQuery(GET_USER_BY_HASHTAG, {
     onCompleted: (e) => setFoundUsers(e.searchByHashtag),
+    skip: true,
   })
 
   if (loadingHash || loadingName) return
@@ -66,7 +67,7 @@ const Search = () => {
           value &&
           foundUsers.slice(0, 2).map((item, key) => {
             return (
-              <div key={key} className="mt-4">
+              <div onClick={() => setValue('')} key={key} className="mt-4">
                 <UserBage {...item.user} />
               </div>
             )
@@ -74,7 +75,9 @@ const Search = () => {
 
         {foundUsers.length > 2 && value && (
           <button
-            onClick={() => navigator.push(`/search?value=${value}`)}
+            onClick={() => {
+              navigator.push(`/search?value=${value}`)
+            }}
             className="bg-white text-blueText font-semibold py-2 w-full border border-blueText rounded-full mt-4"
           >
             Show more

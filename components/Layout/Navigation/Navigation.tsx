@@ -29,12 +29,6 @@ const navs = [
     icon: '/Chat.svg',
     text: 'Messages',
   },
-  {
-    href: 'profile',
-    alt: 'profile',
-    icon: '/Profile.svg',
-    text: 'Profile',
-  },
 ]
 
 const Navigation = () => {

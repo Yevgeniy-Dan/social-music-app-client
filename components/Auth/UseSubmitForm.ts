@@ -15,7 +15,13 @@ type TAuthState = {
 }
 
 const UseSubmitForm = () => {
-  const [auth, setAuth] = useState(false)
+  const [isRegister, setIsRegister] = useState(false)
+  const [authState, setAuthState] = useState<TAuthState>({
+    email: '',
+    password: '',
+    username: '',
+    repeatPassword: '',
+  })
   const dispatch = useDispatch()
   const navigate = useRouter()
   const [signup] = useMutation<SignUpMutation, SignUpMutationVariables>(SET_SIGN_UP)
@@ -23,20 +29,15 @@ const UseSubmitForm = () => {
     SET_LOG_IN
   )
   
-  const submitForm = async (e: FieldValues) => {
-    const { username, email, password } = e
+  const submitForm = async () => {
+    const {email, password, username} = authState
 
-    console.log(
-      '🚀 ~ file: Auth.tsx:45 ~ submitForm ~  username, email, password:',
-      email,
-      password
-    )
-    if (!auth) {
+    if (!isRegister) {
       await login({
         variables: {
           loginUserInput: {
             email,
-            password,
+            password
           },
         },
         onCompleted: (e) => {
@@ -59,16 +60,18 @@ const UseSubmitForm = () => {
           },
         },
       })
-      setAuth(false)
+      setIsRegister(false)
     }
   }
 
 
   return {
-    auth,
-    setAuth,
+    isRegister,
+    setIsRegister,
     submitForm,
-    error
+    error,
+    authState,
+    setAuthState
   }
 }
 

@@ -1,9 +1,9 @@
-import { FC, forwardRef } from 'react'
-interface IOurInput extends React.InputHTMLAttributes<HTMLInputElement> {
+import { FC, forwardRef, LegacyRef } from 'react'
+export interface IOurInput extends React.InputHTMLAttributes<HTMLInputElement> {
   submitIcon?: string
 }
 
-const OurInput: FC<IOurInput> = forwardRef<HTMLInputElement, IOurInput>(
+const OurInput = forwardRef<HTMLInputElement, IOurInput>(
   ({ submitIcon, ...props }, ref) => {
     return (
       <div className={`w-full relative flex p-5 border border-border rounded-[15px]`}>

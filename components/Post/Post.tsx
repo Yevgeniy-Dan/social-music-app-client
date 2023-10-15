@@ -24,34 +24,24 @@ const Post = (props: PostResponse & { deletePost?: (postId: string) => void }) =
       </div>
       <Link href={`/posts/${props.id}`}>
         <div className="rounded-[15px] overflow-hidden mb-4">
-          {/* <img
-            className="w-full object-cover max-h-[360px] min-h-[300px]"
-            src={props.mediaUrl}
-            alt="ava"
-          /> */}
           <Image src={props.mediaUrl} width={900} height={600} alt="Post image" />
         </div>
       </Link>
       <div className="flex self-end">
         {pathname === '/profile' ? (
-          <>
-            <div className="flex items-center justify-center mr-7">
-              <img src="/Edit.svg" alt="" />
-            </div>
-            <div
-              onClick={() => props.deletePost(props.id)}
-              className="flex items-center justify-center mr-7"
-            >
-              <img src="/Delete.svg" alt="" />
-            </div>
-          </>
+          <div
+            onClick={() => props.deletePost(props.id)}
+            className="flex items-center justify-center mr-7"
+          >
+            <img src="/Delete.svg" alt="" />
+          </div>
         ) : null}
 
         <div className="flex gap-2 items-center mr-5">
           <span>{props.totalComments}</span>
           <img src="/Comment.svg" alt="Comment" />
         </div>
-        <OurLike postId={props.id} />
+        <OurLike  postId={props.id}/>
       </div>
     </div>
   )

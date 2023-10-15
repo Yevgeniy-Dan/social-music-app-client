@@ -19,6 +19,7 @@ const httpLink = new HttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const token = JSON.parse(localStorage.getItem('persist:root')) || ''
+  console.log(JSON.parse(token.auth).access_token)
   return {
     headers: {
       ...headers,
@@ -48,10 +49,12 @@ const getNewToken = async () => {
     oldToken = data.refresh.accessToken
 
     localStorage.setItem('persist:root', JSON.stringify(localStore))
+    console.log(
+      '🚀 ~ file: OurApolloProvider.tsx:53 ~ getNewToken ~ data.refresh.accessToken:',
+      data.refresh.accessToken
+    )
     return data.refresh.accessToken
-  } catch (error) {
-    localStorage.removeItem('persist:root')
-  }
+  } catch (error) {}
 }
 
 const errorLink = onError(({ graphQLErrors, operation, forward }) => {

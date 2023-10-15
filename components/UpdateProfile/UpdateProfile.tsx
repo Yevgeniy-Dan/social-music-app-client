@@ -3,7 +3,7 @@ import { selectAuth, updateProfile } from '@/redux/slices/authSlice'
 import OurButton from '@/ui/OurButton'
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { FieldValues, RegisterOptions, useForm } from 'react-hook-form'
+import { FieldValues, useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { inputsValidation } from '../Auth/inputsValidation'
 

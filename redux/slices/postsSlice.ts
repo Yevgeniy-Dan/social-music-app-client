@@ -16,11 +16,14 @@ export const postsSlice = createSlice({
   reducers: {
     addPosts: (state, action) => {
       state.posts = state.posts.concat(action.payload) 
+    },
+    clearPosts: (state) => {
+      state.posts = []
     }
   }
 })
 
-export const { addPosts } = postsSlice.actions
+export const { addPosts, clearPosts } = postsSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 export const postsComment = (state: RootState) => state.posts

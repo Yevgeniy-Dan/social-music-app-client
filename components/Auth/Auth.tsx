@@ -1,46 +1,27 @@
 'use client'
 
 import { motion as m } from 'framer-motion'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { MouseEventHandler, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
-import { useRouter } from 'next/navigation'
-import { useMutation } from '@apollo/client'
-
-import { setCredentials } from '@/redux/slices/authSlice'
-import { SET_LOG_IN, SET_SIGN_UP } from '@/graphql/mutation/auth'
-import {
-  LogInMutation,
-  LogInMutationVariables,
-  SignUpMutation,
-  SignUpMutationVariables,
-} from '@/@types/graphql'
 import OurError from '@/ui/OurError'
 
 import { inputsValidation } from './inputsValidation'
 import UseSubmitForm from './UseSubmitForm'
 
 const Auth = () => {
-  const [repeatPassword, setRepeatPassword] = useState('')
-  const [authState, setAuthState] = useState({
-    email: '',
-    password: '',
-    username: '',
-    repeatPassword: '',
-  })
-
   const {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm({ mode: 'onSubmit' })
+  } = useForm({ mode: 'onBlur' })
 
-  const { auth, setAuth, submitForm, error } = UseSubmitForm()
+  const { isRegister, setIsRegister, submitForm, error, authState, setAuthState } =
+    UseSubmitForm()
 
   const changeAuth: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
-    setAuth((prev) => !prev)
+    setIsRegister((prev) => !prev)
   }
 
   return (
@@ -53,11 +34,11 @@ const Auth = () => {
         className="w-[500px] rounded-[30px] flex flex-col bg-white px-6 py-8 mx-4"
       >
         <h3 className="mb-4 text-2xl font-bold text-center">
-          {auth ? 'REGISTER' : 'SIGN IN'}
+          {isRegister ? 'REGISTER' : 'SIGN IN'}
         </h3>
         <form onSubmit={handleSubmit(submitForm)}>
-          {auth && (
-            <div className="relative">
+          {isRegister && (
+            <div className="relative mb-5">
               <m.input
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -67,6 +48,10 @@ const Auth = () => {
                   ...inputsValidation.username,
                   required: true,
                 })}
+                value={authState.username}
+                onChange={(e) =>
+                  setAuthState((prev) => ({ ...prev, username: e.target.value }))
+                }
                 className={`w-full p-5 border ${
                   errors.username ? 'border-red-500' : 'border-border'
                 } rounded-[15px]`}
@@ -80,13 +65,17 @@ const Auth = () => {
               ) : null}
             </div>
           )}
-          <div className="relative mt-5">
+          <div className="relative">
             <input
               {...register('email', { ...inputsValidation.email, required: true })}
               className={`w-full p-5 border ${
                 errors.email ? 'border-red-500' : 'border-border'
               } rounded-[15px]`}
               placeholder="E-mail"
+              value={authState.email}
+              onChange={(e) =>
+                setAuthState((prev) => ({ ...prev, email: e.target.value }))
+              }
             />
             {errors.email ? (
               <div className="text-red-500 absolute bottom-[-10px] right-6 bg-white px-4">
@@ -100,9 +89,12 @@ const Auth = () => {
               className={`w-full p-5 border ${
                 errors.password ? 'border-red-500' : 'border-border'
               } rounded-[15px]`}
-              onChange={(e) => setRepeatPassword(e.target.value)}
               type="password"
               placeholder="Password"
+              value={authState.password}
+              onChange={(e) => {
+                setAuthState((prev) => ({ ...prev, password: e.target.value }))
+              }}
             />
             {errors.password ? (
               <div className="text-red-500 absolute bottom-[-10px] right-6 bg-white px-4">
@@ -110,11 +102,11 @@ const Auth = () => {
               </div>
             ) : null}
           </div>
-          {auth && (
+          {isRegister && (
             <div className="relative mt-5">
               <input
                 {...register('repeatPassword', {
-                  pattern: new RegExp(repeatPassword, 'g'),
+                  pattern: new RegExp(authState.password, 'g'),
                   required: true,
                 })}
                 className={`w-full p-5 border ${
@@ -134,13 +126,13 @@ const Auth = () => {
             type="submit"
             className="text-white text-base font-bold w-full py-4 mt-5 bg-grad rounded-[15px]"
           >
-            {auth ? 'REGISTER' : 'SIGN IN'}
+            {isRegister ? 'REGISTER' : 'SIGN IN'}
           </button>
           <button
             onClick={(e) => changeAuth(e)}
             className="w-full pt-4 text-base font-bold underline uppercase text-blueText"
           >
-            {auth ? 'SIGN IN' : 'REGISTER'}
+            {isRegister ? 'SIGN IN' : 'REGISTER'}
           </button>
         </form>
       </m.div>

@@ -4,7 +4,7 @@ import Masonry from 'react-masonry-css'
 
 import { useQuery } from '@apollo/client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Post from '@/components/Post/Post'
 import { GET_POSTS } from '@/graphql/query/posts'
 import { GetPostsQuery, GetPostsQueryVariables, PostResponse } from '@/@types/graphql'
-import { addPosts, postsComment } from '@/redux/slices/postsSlice'
+import { addPosts, clearPosts, postsComment } from '@/redux/slices/postsSlice'
 import { AppDispatch } from '@/redux/store'
 
 const Home = () => {
@@ -31,6 +31,12 @@ const Home = () => {
       dispatch(addPosts(e.posts))
     },
   })
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearPosts())
+    }
+  }, [])
 
   const addMorePosts = () => {
     setPageCount((prev) => prev + 1)

@@ -29,15 +29,19 @@ const UserPage = () => {
             alt="userAvatar"
           />
         </div>
-        <div className="border border-border rounded-[15px] px-5 py-4">
-          <h3>{data?.user?.username}</h3>
-          <span>#guitar #jazz #modern</span>
-          <p>
+        <div className="border border-border rounded-[15px] px-5 py-4 relative">
+          <h3 className="text-hero text-mainText font-semibold">
+            {data?.user?.username}
+          </h3>
+          <span className="text-secondText">#guitar #jazz #modern</span>
+          <p className="mt-2">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis sed, nostrum
             tempore ullam recusandae illum numquam repudiandae in est soluta vero aliquid.
             Accusamus, qui a?
           </p>
-          <span>Instagram</span>
+          <div className="absolute bottom-[-10px] right-[16px] bg-white px-2 text-blueText">
+            <span className="cursor-pointer">Instagram</span>
+          </div>
         </div>
       </div>
       <div className="mt-6">

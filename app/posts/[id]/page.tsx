@@ -3,13 +3,20 @@ import { useMutation, useQuery } from '@apollo/client'
 
 import { useParams, useRouter } from 'next/navigation'
 
-import { FormEventHandler, useEffect, useRef, useState } from 'react'
+import {
+  FormEventHandler,
+  ForwardedRef,
+  LegacyRef,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
 import PostComment from '@/components/Comment/PostComment'
 import OurLike from '@/ui/OurLike'
-import OurInput from '@/ui/OurInput'
+import OurInput, { IOurInput } from '@/ui/OurInput'
 import UserBage from '@/ui/UserBage'
 
 import { GET_POST } from '@/graphql/query/posts'
@@ -88,10 +95,6 @@ const PostPage = () => {
     dispatch(clearReply())
   }
 
-  const handleReply = () => {
-    console.log(inputRef.current)
-  }
-
   if (loading) {
     return <PostPageSkeleton />
   }
@@ -102,7 +105,7 @@ const PostPage = () => {
         showAllComments ? '' : 'h-[94vh]'
       } relative`}
     >
-      <div className="max-h-[480px] min-h-[300px] rounded-[15px] overflow-hidden">
+      <div className="max-h-[400px] min-h-[300px] rounded-[15px] overflow-hidden">
         <Image src={data?.post?.mediaUrl} height={480} width={900} alt="Post image" />
       </div>
       <div className="flex my-4">
@@ -155,11 +158,11 @@ const PostPage = () => {
       ) : null}
       <form className="relative h-min" onSubmit={(e) => addNewComment(e)}>
         <OurInput
+          ref={inputRef}
           placeholder="Write your comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           submitIcon={'../Send.svg'}
-          // ref={inputRef}
         />
         {replyUser && (
           <span className="absolute inline-block bottom-[-10px] px-2 bg-white left-5 text-blueText">
